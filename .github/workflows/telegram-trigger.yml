@@ -54,8 +54,7 @@ jobs:
           📝 Action: ${EVENT_ACTION:-N/A}
           🌿 Branch/Ref: ${BRANCH}
           🔄 Workflow: ${WORKFLOW}
-          📊 Status: ${JOB_STATUS}
-          🔗 Details: ${RUN_URL}"
+          📊 Status: ${JOB_STATUS}"
 
           curl -sS --fail-with-body -X POST \
             "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
