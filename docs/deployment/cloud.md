@@ -28,7 +28,9 @@ The browser only talks to Vercel. Server components call the backend directly, a
 
 1. Push the repository to GitHub/GitLab.
 2. Render → **New → Blueprint** → select the repository. Render reads `render.yaml` and creates
-   `khmer-moon-calendar-api` (Docker, `infra/docker/backend.Dockerfile`).
+   `khmer-moon-calendar-api` (Docker, the root `Dockerfile`).
+   Creating a plain **Web Service** instead also works: choose runtime **Docker** and leave Root Directory,
+   Dockerfile Path and Docker Command at their defaults; Render then builds `./Dockerfile`.
 3. Enter the two secret variables when prompted:
 
    | Key | Value |
@@ -36,7 +38,7 @@ The browser only talks to Vercel. Server components call the backend directly, a
    | `DATABASE_URL` | the Neon direct connection string from step 1 |
    | `CORS_ORIGINS` | your Vercel URL, e.g. `https://khmer-moon-calendar.vercel.app` (comma-separate several) |
 
-4. Deploy. On every start the container runs `alembic upgrade head`, then `python -m app.db.seed`
+4. Deploy. On every start the container (root `Dockerfile`) runs `alembic upgrade head`, then `python -m app.db.seed`
    (both idempotent), then uvicorn on Render's `$PORT`.
 5. Check `https://<service>.onrender.com/api/v1/health`: it should return `"database":"ok"`.
 
