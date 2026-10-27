@@ -57,12 +57,6 @@ jobs:
           📊 Status: ${JOB_STATUS}
           🔗 Details: ${RUN_URL}"
 
-          if [ "$EVENT_NAME" = "push" ]; then
-            MESSAGE="${MESSAGE}
-
-          📝 Commit: ${COMMIT}"
-          fi
-
           curl -sS --fail-with-body -X POST \
             "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
             --data-urlencode "chat_id=${CHAT_ID}" \
