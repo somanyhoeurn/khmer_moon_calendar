@@ -19,7 +19,7 @@ make prod-up          # build images, start db/backend/frontend/nginx
 make prod-migrate     # one-off: alembic upgrade head + verified seed data
 ```
 
-Images can also be built on their own (CI does this in `.github/workflows/docker-build.yml`):
+Images can also be built on their own:
 
 ```bash
 docker build -f infra/docker/backend.Dockerfile  -t kmc-backend  .

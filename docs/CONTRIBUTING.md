@@ -5,7 +5,7 @@
 1. Branch from `main`.
 2. Make the change and add or adjust tests.
 3. Run `make lint` and `make test`. Run `make test-e2e` for UI flows.
-4. Open a pull request. CI runs lint, type checks, tests (backend against PostgreSQL), the production build, dependency audits, Docker builds and Playwright.
+4. Before opening a pull request, run `make lint` and `make test` (and `npx playwright test` for UI changes) locally; there is no hosted CI.
 
 ## Code style
 

@@ -36,7 +36,7 @@ See [docs/architecture/overview.md](docs/architecture/overview.md).
 | Frontend | Next.js 16 (App Router), React 19, TypeScript (strict), Tailwind CSS 4, shadcn/ui-style components, TanStack Query, React Hook Form + Zod, next-intl |
 | Backend | Python 3.13, FastAPI, Pydantic 2, SQLAlchemy 2.1, Alembic, pytest, Ruff, mypy (strict) |
 | Data | PostgreSQL 17 (SQLite for zero-config local runs and unit tests) |
-| Infrastructure | Docker, Docker Compose, Nginx, GitHub Actions |
+| Infrastructure | Docker, Docker Compose, Nginx |
 
 ## Repository layout
 
@@ -48,7 +48,7 @@ KhmerMoonCalendar/
 ├── docs/       Architecture, API, database, calendar methodology, deployment, security
 ├── scripts/    setup/dev/lint/test helpers, seed_database.py
 ├── tests/      Playwright end-to-end tests and published-reference fixtures
-└── .github/    CI and Docker build workflows
+└── .github/    Telegram notification workflow
 ```
 
 ## Prerequisites

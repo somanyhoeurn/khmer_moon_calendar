@@ -32,7 +32,7 @@
 ## Dependencies
 
 - Lockfiles: `frontend/package-lock.json`, `backend/requirements*.txt`.
-- CI runs `npm audit` and `pip-audit`. Dependabot proposes weekly updates.
+- Run `npm audit` (frontend) and `pip-audit` (backend) before releases; dependency updates are applied manually.
 - Check the license of any new dependency before adding it (see `THIRD_PARTY_NOTICES.md`). Avoid GPL-family licenses for linked code.
 
 ## Authentication
