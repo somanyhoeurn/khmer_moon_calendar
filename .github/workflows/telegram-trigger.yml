@@ -1,0 +1,69 @@
+
+name: Telegram - All GitHub Activity
+
+on:
+  push:
+  pull_request:
+    types: [opened, closed, reopened, synchronize]
+  issues:
+    types: [opened, closed, reopened]
+  issue_comment:
+    types: [created]
+  create:
+  delete:
+  fork:
+  watch:
+    types: [started]
+  release:
+    types: [published]
+  workflow_run:
+    workflows: ["*"]
+    types: [completed]
+  workflow_dispatch:
+  repository_dispatch:
+    types: [telegram_trigger]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  notify-telegram:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Telegram Notification
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          EVENT_NAME: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+          BRANCH: ${{ github.ref_name }}
+          COMMIT: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          EVENT_ACTION: ${{ github.event.action }}
+          WORKFLOW: ${{ github.workflow }}
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          MESSAGE="🔔 GitHub Repository Activity
+
+          📁 Repository: ${REPOSITORY}
+          👤 User: ${ACTOR}
+          ⚡ Event: ${EVENT_NAME}
+          📝 Action: ${EVENT_ACTION:-N/A}
+          🌿 Branch/Ref: ${BRANCH}
+          🔄 Workflow: ${WORKFLOW}
+          📊 Status: ${JOB_STATUS}
+          🔗 Details: ${RUN_URL}"
+
+          if [ "$EVENT_NAME" = "push" ]; then
+            MESSAGE="${MESSAGE}
+
+          📝 Commit: ${COMMIT}"
+          fi
+
+          curl -sS --fail-with-body -X POST \
+            "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${CHAT_ID}" \
+            --data-urlencode "text=${MESSAGE}"
