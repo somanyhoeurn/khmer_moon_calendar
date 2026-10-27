@@ -1,0 +1,21 @@
+{
+  "source": "Sub-Decree No. 167 (2026 public holidays) — Andersen Cambodia summary",
+  "verification_status": "secondary_source",
+  "holidays": [
+    {"slug": "international-new-year-2026", "name_km": "ទិវាចូលឆ្នាំសកល", "name_en": "International New Year's Day", "start_date": "2026-01-01", "end_date": "2026-01-01", "category": "international"},
+    {"slug": "victory-over-genocide-day-2026", "name_km": "ទិវាជ័យជម្នះលើរបបប្រល័យពូជសាសន៍", "name_en": "Victory over Genocide Day", "start_date": "2026-01-07", "end_date": "2026-01-07", "category": "national"},
+    {"slug": "international-womens-day-2026", "name_km": "ទិវានារីអន្តរជាតិ", "name_en": "International Women's Day", "start_date": "2026-03-08", "end_date": "2026-03-08", "category": "international"},
+    {"slug": "khmer-new-year-2026", "name_km": "ពិធីបុណ្យចូលឆ្នាំប្រពៃណីជាតិ", "name_en": "Khmer New Year", "start_date": "2026-04-14", "end_date": "2026-04-16", "category": "traditional", "description_en": "Moha Songkran, Virak Vanabat and Vearak Loeung Sak.", "description_km": "មហាសង្ក្រាន្ត វារៈវ័នបត និងវារៈឡើងស័ក។"},
+    {"slug": "labour-day-visak-bochea-2026", "name_km": "ទិវាពលកម្មអន្តរជាតិ និងពិធីបុណ្យវិសាខបូជា", "name_en": "International Labour Day & Visak Bochea", "start_date": "2026-05-01", "end_date": "2026-05-01", "category": "buddhist", "lunar_rule": "visak-bochea", "description_en": "In 2026 the full moon of Pisakh coincides with Labour Day; both are observed on one day.", "description_km": "ក្នុងឆ្នាំ២០២៦ ថ្ងៃ១៥កើត ខែពិសាខ ត្រូវនឹងទិវាពលកម្មអន្តរជាតិ។"},
+    {"slug": "royal-ploughing-ceremony-2026", "name_km": "ព្រះរាជពិធីច្រត់ព្រះនង្គ័ល", "name_en": "Royal Ploughing Ceremony", "start_date": "2026-05-05", "end_date": "2026-05-05", "category": "royal", "lunar_rule": "royal-ploughing-ceremony"},
+    {"slug": "king-sihamoni-birthday-2026", "name_km": "ព្រះរាជពិធីបុណ្យចម្រើនព្រះជន្ម ព្រះករុណាព្រះបាទសម្តេចព្រះបរមនាថ នរោត្តម សីហមុនី", "name_en": "Birthday of His Majesty King Norodom Sihamoni", "start_date": "2026-05-14", "end_date": "2026-05-14", "category": "royal"},
+    {"slug": "queen-mother-birthday-2026", "name_km": "ព្រះរាជពិធីបុណ្យចម្រើនព្រះជន្ម សម្តេចព្រះមហាក្សត្រី នរោត្តម មុនិនាថ សីហនុ", "name_en": "Birthday of Her Majesty Queen Mother Norodom Monineath Sihanouk", "start_date": "2026-06-18", "end_date": "2026-06-18", "category": "royal"},
+    {"slug": "constitution-day-2026", "name_km": "ទិវាប្រកាសរដ្ឋធម្មនុញ្ញ", "name_en": "Constitution Day", "start_date": "2026-09-24", "end_date": "2026-09-24", "category": "national"},
+    {"slug": "pchum-ben-2026", "name_km": "ពិធីបុណ្យភ្ជុំបិណ្ឌ", "name_en": "Pchum Ben Festival", "start_date": "2026-10-10", "end_date": "2026-10-12", "category": "traditional", "lunar_rule": "pchum-ben", "description_en": "Three public-holiday days around the 15th waning day of Phatrabot.", "description_km": "ថ្ងៃឈប់សម្រាក៣ថ្ងៃ ជុំវិញថ្ងៃ១៥រោច ខែភទ្របទ។"},
+    {"slug": "king-father-commemoration-day-2026", "name_km": "ទិវាប្រារព្ធពិធីគោរពព្រះវិញ្ញាណក្ខន្ធ ព្រះករុណាព្រះបាទសម្តេចព្រះ នរោត្តម សីហនុ", "name_en": "Commemoration Day of King Father Norodom Sihanouk", "start_date": "2026-10-15", "end_date": "2026-10-15", "category": "royal"},
+    {"slug": "coronation-day-2026", "name_km": "ព្រះរាជពិធីគ្រងព្រះបរមរាជសម្បត្តិ ព្រះករុណាព្រះបាទសម្តេចព្រះបរមនាថ នរោត្តម សីហមុនី", "name_en": "Coronation Day of His Majesty King Norodom Sihamoni", "start_date": "2026-10-29", "end_date": "2026-10-29", "category": "royal"},
+    {"slug": "independence-day-2026", "name_km": "ពិធីបុណ្យឯករាជ្យជាតិ", "name_en": "Independence Day", "start_date": "2026-11-09", "end_date": "2026-11-09", "category": "national"},
+    {"slug": "water-festival-2026", "name_km": "ព្រះរាជពិធីបុណ្យអុំទូក បណ្ដែតប្រទីប និងសំពះព្រះខែ អកអំបុក", "name_en": "Water Festival (Bon Om Touk)", "start_date": "2026-11-23", "end_date": "2026-11-25", "category": "traditional", "lunar_rule": "water-festival"},
+    {"slug": "peace-day-2026", "name_km": "ទិវាសន្តិភាពនៅកម្ពុជា", "name_en": "Peace Day in Cambodia", "start_date": "2026-12-29", "end_date": "2026-12-29", "category": "national"}
+  ]
+}

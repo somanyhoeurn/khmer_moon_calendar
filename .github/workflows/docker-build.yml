@@ -1,0 +1,40 @@
+name: Docker build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    paths:
+      - "infra/**"
+      - "backend/**"
+      - "frontend/**"
+      - ".github/workflows/docker-build.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        image: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build ${{ matrix.image }} (production image)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: infra/docker/${{ matrix.image }}.Dockerfile
+          push: false
+          tags: khmer-moon-calendar-${{ matrix.image }}:${{ github.sha }}
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image }}
+      - name: Validate compose files
+        run: |
+          POSTGRES_PASSWORD=x docker compose config --quiet
+          POSTGRES_DB=x POSTGRES_USER=x POSTGRES_PASSWORD=x CORS_ORIGINS=x NEXT_PUBLIC_SITE_URL=x \
+            docker compose -f infra/deployment/docker-compose.prod.yml config --quiet

@@ -1,0 +1,20 @@
+{
+  "name": "khmer-moon-calendar",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Khmer Moon Calendar - Preserving Khmer Time and Tradition",
+  "license": "MIT",
+  "scripts": {
+    "dev": "bash scripts/dev.sh",
+    "build": "npm --prefix frontend run build",
+    "lint": "bash scripts/lint.sh",
+    "typecheck": "npm --prefix frontend run typecheck && cd backend && python -m mypy app",
+    "test": "bash scripts/test.sh",
+    "test:frontend": "npm --prefix frontend test",
+    "test:backend": "cd backend && python -m pytest",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "description": "Expected lunar dates that do NOT come from the engine under test. 'published-holiday' entries pair a Gregorian date from a published Cambodian holiday list with the traditional lunar rule of that holiday. 'upstream-example' entries are documented MomentKH examples and only prove the port is faithful to upstream, not that upstream is correct.",
+  "dates": [
+    {"date": "2024-05-22", "month": "pisakh", "day": 15, "phase": "waxing", "be_year": 2567, "kind": "published-holiday", "note": "Visak Bochea 2024"},
+    {"date": "2024-05-26", "month": "pisakh", "day": 4, "phase": "waning", "be_year": 2568, "kind": "published-holiday", "note": "Royal Ploughing 2024"},
+    {"date": "2024-10-02", "month": "phatrabot", "day": 15, "phase": "waning", "kind": "published-holiday", "note": "Pchum Ben 2024 (1-3 Oct)"},
+    {"date": "2024-11-15", "month": "kadeuk", "day": 15, "phase": "waxing", "kind": "published-holiday", "note": "Water Festival 2024 (14-16 Nov)"},
+    {"date": "2025-05-11", "month": "pisakh", "day": 15, "phase": "waxing", "be_year": 2568, "kind": "published-holiday", "note": "Visak Bochea 2025"},
+    {"date": "2025-05-15", "month": "pisakh", "day": 4, "phase": "waning", "be_year": 2569, "kind": "published-holiday", "note": "Royal Ploughing 2025"},
+    {"date": "2025-09-22", "month": "phatrabot", "day": 15, "phase": "waning", "kind": "published-holiday", "note": "Pchum Ben 2025 (21-23 Sep)"},
+    {"date": "2025-11-05", "month": "kadeuk", "day": 15, "phase": "waxing", "kind": "published-holiday", "note": "Water Festival 2025 (4-6 Nov)"},
+    {"date": "2026-05-01", "month": "pisakh", "day": 15, "phase": "waxing", "be_year": 2569, "kind": "published-holiday", "note": "Visak Bochea 2026 (Sub-Decree 167)"},
+    {"date": "2026-05-05", "month": "pisakh", "day": 4, "phase": "waning", "be_year": 2570, "kind": "published-holiday", "note": "Royal Ploughing 2026 (Sub-Decree 167)"},
+    {"date": "2026-10-11", "month": "phatrabot", "day": 15, "phase": "waning", "kind": "published-holiday", "note": "Pchum Ben 2026 (10-12 Oct)"},
+    {"date": "2026-11-24", "month": "kadeuk", "day": 15, "phase": "waxing", "kind": "published-holiday", "note": "Water Festival 2026 (23-25 Nov)"},
+    {"date": "2025-12-10", "month": "migasir", "day": 5, "phase": "waning", "be_year": 2569, "animal_year": 5, "sak": 7, "kind": "upstream-example", "note": "MomentKH README: ថ្ងៃពុធ ៥រោច ខែមិគសិរ ឆ្នាំម្សាញ់ សប្តស័ក ពុទ្ធសករាជ ២៥៦៩"},
+    {"date": "2025-05-03", "month": "pisakh", "day": 7, "phase": "waxing", "be_year": 2568, "kind": "upstream-example", "note": "MomentKH README: សៅរ៍, ៧កើត ខែពិសាខ ព.ស.២៥៦៨"},
+    {"date": "2024-04-14", "month": "cheit", "day": 6, "phase": "waxing", "animal_year": 4, "kind": "upstream-example", "note": "MomentKH README: ៦កើត ខែចេត្រ ឆ្នាំរោង (README's era/BE differ from upstream code; not asserted)"}
+  ]
+}

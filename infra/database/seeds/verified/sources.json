@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Sub-Decree No. 167 (2026 public holidays) — Andersen Cambodia summary",
+    "source_url": "https://kh.andersen.com/publications/cambodia-sets-official-2026-public-holiday-schedule/",
+    "source_type": "secondary",
+    "publication_year": 2025,
+    "description": "Law-firm summary of Sub-Decree No. 167 of the Royal Government of Cambodia (issued 18 September 2025) establishing the 2026 public holidays.",
+    "verification_notes": "Secondary source; the sub-decree text itself has not yet been reviewed. The article states 22 paid days but its table sums to 21. Another summary (Prasac) gives a different issue date for the sub-decree. Upgrade records to 'official' only after checking the primary text."
+  },
+  {
+    "name": "Cambodia public holidays 2025 — MRTS Consulting summary",
+    "source_url": "https://mrtsconsulting.com/news/cambodia-public-holidays-2025/",
+    "source_type": "secondary",
+    "publication_year": 2025,
+    "description": "Published 2025 holiday list: Visak Bochea 11 May, Royal Ploughing 15 May, Pchum Ben 21–23 September, Water Festival 4–6 November.",
+    "verification_notes": "Dates agree with Calendarific's 2025 Cambodia list. Primary Prakas not reviewed."
+  },
+  {
+    "name": "Cambodia public holidays 2024 — Swiss Embassy and ARDB lists",
+    "source_url": "https://www.eda.admin.ch/countries/cambodia/en/home/news/feiertage.html",
+    "source_type": "secondary",
+    "publication_year": 2024,
+    "description": "Published 2024 holiday list: Visak Bochea 22 May, Royal Ploughing 26 May, Pchum Ben 1–3 October, Water Festival 14–16 November.",
+    "verification_notes": "Water Festival dates cross-checked with ARDB and Calendarific. At least one listing (Siem Reap) disagrees for Visak and Ploughing; majority of sources used."
+  }
+]

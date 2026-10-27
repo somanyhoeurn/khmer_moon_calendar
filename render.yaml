@@ -1,0 +1,30 @@
+# Render Blueprint for the FastAPI backend (https://render.com/docs/blueprint-spec).
+# Render → New → Blueprint → pick this repository. Secrets are entered in the dashboard
+# ("sync: false"); never commit them here.
+services:
+  - type: web
+    name: khmer-moon-calendar-api
+    runtime: docker
+    plan: free # upgrade to "starter" to avoid cold starts (free instances sleep after 15 minutes idle)
+    region: singapore # close to Neon ap-southeast-1 and Vercel sin1
+    dockerfilePath: ./infra/docker/backend.Dockerfile
+    dockerContext: .
+    # Migrations and the verified seed data are both idempotent, so they run on every start
+    # (the free plan has no pre-deploy step). Render provides $PORT.
+    dockerCommand: >-
+      sh -c "alembic upgrade head && python -m app.db.seed &&
+      exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8087} --workers 1
+      --proxy-headers --forwarded-allow-ips '*'"
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL # Neon *direct* connection string (see docs/deployment/cloud.md)
+        sync: false
+      - key: CORS_ORIGINS # e.g. https://your-app.vercel.app
+        sync: false
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_FORMAT
+        value: json
+      - key: TIMEZONE
+        value: Asia/Phnom_Penh

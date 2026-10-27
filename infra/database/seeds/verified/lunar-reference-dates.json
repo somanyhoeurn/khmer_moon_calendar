@@ -1,0 +1,18 @@
+{
+  "description": "Lunar dates derived from published lunar-anchored public holidays. Each Gregorian date is taken from the cited holiday list; the lunar date is the traditional rule that holiday follows (e.g. Visak Bochea = ១៥កើត ខែពិសាខ). These records are independent of the calculation engine and are used to verify it.",
+  "verification_status": "secondary_source",
+  "records": [
+    {"gregorian_date": "2024-05-22", "lunar_year": 2567, "lunar_month": "pisakh", "lunar_day": 15, "lunar_phase": "waxing", "source": "Cambodia public holidays 2024 — Swiss Embassy and ARDB lists", "notes": "Visak Bochea"},
+    {"gregorian_date": "2024-05-26", "lunar_year": 2568, "lunar_month": "pisakh", "lunar_day": 4, "lunar_phase": "waning", "source": "Cambodia public holidays 2024 — Swiss Embassy and ARDB lists", "notes": "Royal Ploughing Ceremony"},
+    {"gregorian_date": "2024-10-02", "lunar_year": 2568, "lunar_month": "phatrabot", "lunar_day": 15, "lunar_phase": "waning", "source": "Cambodia public holidays 2024 — Swiss Embassy and ARDB lists", "notes": "Middle day of Pchum Ben (1–3 Oct)"},
+    {"gregorian_date": "2024-11-15", "lunar_year": 2568, "lunar_month": "kadeuk", "lunar_day": 15, "lunar_phase": "waxing", "source": "Cambodia public holidays 2024 — Swiss Embassy and ARDB lists", "notes": "Middle day of Water Festival (14–16 Nov)"},
+    {"gregorian_date": "2025-05-11", "lunar_year": 2568, "lunar_month": "pisakh", "lunar_day": 15, "lunar_phase": "waxing", "source": "Cambodia public holidays 2025 — MRTS Consulting summary", "notes": "Visak Bochea"},
+    {"gregorian_date": "2025-05-15", "lunar_year": 2569, "lunar_month": "pisakh", "lunar_day": 4, "lunar_phase": "waning", "source": "Cambodia public holidays 2025 — MRTS Consulting summary", "notes": "Royal Ploughing Ceremony"},
+    {"gregorian_date": "2025-09-22", "lunar_year": 2569, "lunar_month": "phatrabot", "lunar_day": 15, "lunar_phase": "waning", "source": "Cambodia public holidays 2025 — MRTS Consulting summary", "notes": "Middle day of Pchum Ben (21–23 Sep)"},
+    {"gregorian_date": "2025-11-05", "lunar_year": 2569, "lunar_month": "kadeuk", "lunar_day": 15, "lunar_phase": "waxing", "source": "Cambodia public holidays 2025 — MRTS Consulting summary", "notes": "Middle day of Water Festival (4–6 Nov)"},
+    {"gregorian_date": "2026-05-01", "lunar_year": 2569, "lunar_month": "pisakh", "lunar_day": 15, "lunar_phase": "waxing", "source": "Sub-Decree No. 167 (2026 public holidays) — Andersen Cambodia summary", "notes": "Visak Bochea (with Labour Day)"},
+    {"gregorian_date": "2026-05-05", "lunar_year": 2570, "lunar_month": "pisakh", "lunar_day": 4, "lunar_phase": "waning", "source": "Sub-Decree No. 167 (2026 public holidays) — Andersen Cambodia summary", "notes": "Royal Ploughing Ceremony"},
+    {"gregorian_date": "2026-10-11", "lunar_year": 2570, "lunar_month": "phatrabot", "lunar_day": 15, "lunar_phase": "waning", "source": "Sub-Decree No. 167 (2026 public holidays) — Andersen Cambodia summary", "notes": "Middle day of Pchum Ben (10–12 Oct)"},
+    {"gregorian_date": "2026-11-24", "lunar_year": 2570, "lunar_month": "kadeuk", "lunar_day": 15, "lunar_phase": "waxing", "source": "Sub-Decree No. 167 (2026 public holidays) — Andersen Cambodia summary", "notes": "Middle day of Water Festival (23–25 Nov)"}
+  ]
+}

@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design tokens. Forest green is the brand, muted gold marks meaningful
+ * (Buddhist) highlights, warm ivory is the page. Text colours are tuned to
+ * meet WCAG AA (4.5:1) on both ivory and white.
+ */
+:root {
+  --background: #faf8f1;
+  --surface: #ffffff;
+  --surface-muted: #f3f0e6;
+  --foreground: #252a27;
+  --muted: #646c66;
+  --border: #e6e1d3;
+  --border-strong: #d6cfbc;
+
+  --forest: #174a35;
+  --primary: #23834b;
+  --primary-hover: #1c6c3d;
+  --primary-foreground: #ffffff;
+  --sage: #eaf2e8;
+
+  --gold: #d4af62;
+  --gold-text: #7f6123;
+  --gold-soft: #f8f0dc;
+
+  --holiday: #b4483d;
+  --holiday-soft: #fbebe7;
+
+  --ring: #23834b;
+
+  /* Buddha mark */
+  --logo-figure: #174a35;
+  --logo-halo: #d4af62;
+  --logo-detail: #faf8f1;
+}
+
+.dark {
+  --background: #101713;
+  --surface: #161f1a;
+  --surface-muted: #1c2721;
+  --foreground: #ece8dc;
+  --muted: #a3ada6;
+  --border: #29352e;
+  --border-strong: #37463d;
+
+  --forest: #cfe3d4;
+  --primary: #5fbf86;
+  --primary-hover: #7bcf9c;
+  --primary-foreground: #0d1611;
+  --sage: #1d3427;
+
+  --gold: #d4af62;
+  --gold-text: #e1c27f;
+  --gold-soft: #2e2817;
+
+  --holiday: #f0907f;
+  --holiday-soft: #3a211d;
+
+  --ring: #7bcf9c;
+
+  --logo-figure: #e6cf94;
+  --logo-halo: #b8933f;
+  --logo-detail: #161f1a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-forest: var(--forest);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-sage: var(--sage);
+  --color-gold: var(--gold);
+  --color-gold-text: var(--gold-text);
+  --color-gold-soft: var(--gold-soft);
+  --color-holiday: var(--holiday);
+  --color-holiday-soft: var(--holiday-soft);
+  --color-ring: var(--ring);
+  /* Rubik has no Khmer glyphs, so Khmer text falls through to Battambang per character. */
+  --font-sans: var(--font-rubik), var(--font-battambang), "Noto Sans Khmer", system-ui, sans-serif;
+
+  --animate-fade-in: fade-in 220ms ease-out;
+  --animate-rise-in: rise-in 240ms ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Khmer stacks subscript consonants and vowels above and below the line; give them room. */
+:lang(km) {
+  line-height: 1.8;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

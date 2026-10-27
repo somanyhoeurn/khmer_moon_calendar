@@ -1,0 +1,10 @@
+{
+  "description": "Expected values for end-to-end tests, taken from published Cambodian holiday lists (see infra/database/seeds/verified/sources.json), not from the calculation engine.",
+  "pchumBen2026": {
+    "gregorian": "2026-10-11",
+    "lunarEn": "15th waning day of Phatrabot",
+    "holidayNameEn": "Pchum Ben Festival",
+    "holidaySlug": "pchum-ben-2026",
+    "holidayNameKm": "ពិធីបុណ្យភ្ជុំបិណ្ឌ"
+  }
+}

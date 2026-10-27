@@ -1,0 +1,72 @@
+# Local development stack: PostgreSQL + FastAPI (hot reload) + Next.js (hot reload).
+# Usage: cp .env.example .env && docker compose up --build
+# Production: infra/deployment/docker-compose.prod.yml (adds Nginx, production images).
+
+name: khmer-moon-calendar
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports:
+      - "5349:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-khmer_moon_calendar}
+      POSTGRES_USER: ${POSTGRES_USER:-kmc}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/database/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # No host port: only the backend talks to the database.
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      ENVIRONMENT: development
+      LOG_FORMAT: console
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-kmc}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-khmer_moon_calendar}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000}
+      SEED_DATA_DIR: /seeds
+    volumes:
+      - ./backend/app:/app/app
+      - ./backend/migrations:/app/migrations
+      - ./infra/database/seeds:/seeds:ro
+    ports:
+      - "127.0.0.1:8087:8087"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8087/api/v1/health', timeout=4)"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      API_INTERNAL_URL: http://backend:8087
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  pgdata:

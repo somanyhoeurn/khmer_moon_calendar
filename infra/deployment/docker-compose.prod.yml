@@ -1,0 +1,80 @@
+# Production-oriented stack: Nginx (public) -> Next.js + FastAPI (internal) -> PostgreSQL.
+# Run from the repository root:
+#   docker compose -f infra/deployment/docker-compose.prod.yml --env-file .env up -d --build
+#   docker compose -f infra/deployment/docker-compose.prod.yml run --rm migrate
+
+name: khmer-moon-calendar-prod
+
+x-backend-env: &backend-env
+  ENVIRONMENT: production
+  LOG_FORMAT: json
+  DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:?}:${POSTGRES_PASSWORD:?}@db:5432/${POSTGRES_DB:?}
+  CORS_ORIGINS: ${CORS_ORIGINS:?Set CORS_ORIGINS to the public site origin}
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?}
+      POSTGRES_USER: ${POSTGRES_USER:?}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [internal]
+
+  migrate:
+    build: { context: ../.., dockerfile: infra/docker/backend.Dockerfile }
+    environment: *backend-env
+    command: ["sh", "-c", "alembic upgrade head && python -m app.db.seed"]
+    depends_on:
+      db: { condition: service_healthy }
+    networks: [internal]
+    profiles: [tools]
+
+  backend:
+    build: { context: ../.., dockerfile: infra/docker/backend.Dockerfile }
+    restart: always
+    environment: *backend-env
+    read_only: true
+    tmpfs: [/tmp]
+    depends_on:
+      db: { condition: service_healthy }
+    networks: [internal]
+
+  frontend:
+    build:
+      context: ../..
+      dockerfile: infra/docker/frontend.Dockerfile
+      args:
+        API_INTERNAL_URL: http://backend:8087
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:?}
+    restart: always
+    environment:
+      API_INTERNAL_URL: http://backend:8087
+    depends_on:
+      backend: { condition: service_healthy }
+    networks: [internal]
+
+  nginx:
+    image: nginx:1.29-alpine
+    restart: always
+    volumes:
+      - ../nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    depends_on:
+      frontend: { condition: service_healthy }
+      backend: { condition: service_healthy }
+    networks: [internal]
+
+volumes:
+  pgdata:
+
+networks:
+  internal:
