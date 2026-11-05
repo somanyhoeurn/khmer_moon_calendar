@@ -5,7 +5,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Query
 
-from app.api.deps import Conversion
+from app.api.deps import Cache, Conversion
 from app.domain.calendar.constants import MoonPhase
 from app.schemas import ErrorResponse, LunarDateOut, LunarMonthId, ReverseConversionOut
 
@@ -21,9 +21,11 @@ _errors: dict[int | str, dict[str, object]] = {422: {"model": ErrorResponse}}
 )
 def convert(
     service: Conversion,
+    cache: Cache,
     date_: Annotated[date, Query(alias="date", examples=["2026-10-27"], description="ISO date")],
 ) -> LunarDateOut:
-    return service.to_lunar(date_)
+    key = f"lunar:convert:{date_.isoformat()}"
+    return cache.get_or_set(key, LunarDateOut, lambda: service.to_lunar(date_))
 
 
 @router.get(
@@ -39,9 +41,11 @@ def convert(
 )
 def reverse(
     service: Conversion,
+    cache: Cache,
     year: Annotated[int, Query(ge=2444, le=2644, examples=[2570], description="BE year")],
     month: Annotated[LunarMonthId, Query(examples=["assoch"])],
     day: Annotated[int, Query(ge=1, le=15, examples=[1])],
     phase: Annotated[MoonPhase, Query(examples=["waning"])],
 ) -> ReverseConversionOut:
-    return service.to_gregorian(year, month, day, phase)
+    key = f"lunar:reverse:{year}:{month}:{day}:{phase.value}"
+    return cache.get_or_set(key, ReverseConversionOut, lambda: service.to_gregorian(year, month, day, phase))

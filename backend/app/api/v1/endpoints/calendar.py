@@ -4,7 +4,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Query
 
-from app.api.deps import Calendar
+from app.api.deps import Cache, Calendar
 from app.schemas import CalendarMonthOut, CalendarYearOut, ErrorResponse, TodayOut
 
 router = APIRouter(prefix="/calendar", tags=["calendar"])
@@ -26,10 +26,13 @@ def today(service: Calendar) -> TodayOut:
 )
 def month(
     service: Calendar,
+    cache: Cache,
     year: YearParam,
     month: Annotated[int, Query(ge=1, le=12, examples=[10])],
 ) -> CalendarMonthOut:
-    return service.month(year, month)
+    # Days carry is_today, so entries are per Cambodian calendar day.
+    key = f"calendar:month:{year}-{month}:{service.now().date().isoformat()}"
+    return cache.get_or_set(key, CalendarMonthOut, lambda: service.month(year, month))
 
 
 @router.get(
@@ -38,5 +41,6 @@ def month(
     responses=_errors,
     summary="A full Gregorian year grouped by month",
 )
-def year(service: Calendar, year: YearParam) -> CalendarYearOut:
-    return service.year(year)
+def year(service: Calendar, cache: Cache, year: YearParam) -> CalendarYearOut:
+    key = f"calendar:year:{year}:{service.now().date().isoformat()}"
+    return cache.get_or_set(key, CalendarYearOut, lambda: service.year(year))

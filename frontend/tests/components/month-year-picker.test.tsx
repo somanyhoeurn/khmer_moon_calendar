@@ -35,11 +35,14 @@ describe("isCoveredByHoliday", () => {
   const published = holidays as Holiday[];
 
   it("defers fixed-date commemorations and Songkran to the published holiday of the same day", () => {
-    const labour: CalendarEvent = { ...base, slug: "international-labour-day-2026", start_date: "2026-05-01", end_date: "2026-05-01", origin: "date_rule" };
+    const labour: CalendarEvent = { ...base, slug: "international-labour-day-2026", start_date: "2026-05-01", end_date: "2026-05-01", origin: "date_rule", expected_public_holiday: true };
     const songkran: CalendarEvent = { ...base, slug: "khmer-new-year-songkran-2026", start_date: "2026-04-14", end_date: "2026-04-16", origin: "songkran_calculation" };
     const teachers: CalendarEvent = { ...base, slug: "world-teachers-day-2026", start_date: "2026-10-05", end_date: "2026-10-05", origin: "date_rule" };
+    // A commemoration inside the Water Festival is a separate event, not the holiday itself.
+    const sbekThom: CalendarEvent = { ...base, slug: "sbek-thom-heritage-2026", start_date: "2026-11-25", end_date: "2026-11-25", origin: "date_rule" };
     expect(isCoveredByHoliday(labour, published)).toBe(true);
     expect(isCoveredByHoliday(songkran, published)).toBe(true);
     expect(isCoveredByHoliday(teachers, published)).toBe(false);
+    expect(isCoveredByHoliday(sbekThom, published)).toBe(false);
   });
 });

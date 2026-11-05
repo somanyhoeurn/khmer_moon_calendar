@@ -134,9 +134,6 @@ export function HolidayDirectory({ initialYear }: { initialYear: number }) {
                         <Link href={`/holidays/${h.slug}`} className="font-medium hover:underline">
                           {km ? h.name_km : h.name_en}
                         </Link>
-                        <p className="text-sm text-muted" lang={km ? "en" : "km"}>
-                          {km ? h.name_en : h.name_km}
-                        </p>
                         <p className="text-sm">{formatRange(h.start_date, h.end_date, locale)}</p>
                       </div>
                       <div className="flex flex-wrap gap-1">

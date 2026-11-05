@@ -27,7 +27,7 @@ python -m app.db.seed
 uvicorn app.main:app --reload
 ```
 
-Configuration comes from environment variables (see `app/core/config.py` and the root `.env.example`): `DATABASE_URL`, `CORS_ORIGINS`, `ENVIRONMENT`, `LOG_LEVEL`, `LOG_FORMAT`, `TIMEZONE` and `SEED_DATA_DIR`.
+Configuration comes from environment variables (see `app/core/config.py` and the root `.env.example`): `DATABASE_URL`, `CORS_ORIGINS`, `ENVIRONMENT`, `LOG_LEVEL`, `LOG_FORMAT`, `TIMEZONE`, `SEED_DATA_DIR`, and the optional cache settings `REDIS_URL`, `REDIS_TIMEOUT_SECONDS` and `CACHE_TTL_SECONDS` (see [ADR 0005](../docs/architecture/decisions/0005-redis-response-cache.md)).
 
 ## Quality
 

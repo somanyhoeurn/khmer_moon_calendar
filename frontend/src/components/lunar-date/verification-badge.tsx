@@ -6,12 +6,11 @@ import type { Verification } from "@/types/api";
 /** Makes the verification status of a lunar date explicit; calculated dates are never shown as confirmed. */
 export function VerificationBadge({ verification, showHint = false }: { verification: Verification; showHint?: boolean }) {
   const t = useTranslations("verification");
-  const source = verification.reference_source?.name ?? "";
   const hint =
     verification.status === "verified"
-      ? t("verifiedHint", { source })
+      ? t("verifiedHint")
       : verification.status === "overridden"
-        ? t("overriddenHint", { source, calculated: verification.calculated_lunar_date_en ?? "" })
+        ? t("overriddenHint", { calculated: verification.calculated_lunar_date_en ?? "" })
         : t("calculatedHint");
 
   const icon =

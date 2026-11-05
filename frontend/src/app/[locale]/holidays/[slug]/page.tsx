@@ -64,14 +64,11 @@ export default async function HolidayDetailPage({ params }: { params: Params }) 
   return (
     <article className="mx-auto max-w-4xl space-y-4">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-      <Link href="/holidays" className="text-sm text-primary hover:underline">
+      <Link href="/holidays" className="text-sm text-primary-text hover:underline">
         ← {t("back")}
       </Link>
       <header>
         <h1 className="text-2xl font-semibold">{km ? holiday.name_km : holiday.name_en}</h1>
-        <p className="text-muted" lang={km ? "en" : "km"}>
-          {km ? holiday.name_en : holiday.name_km}
-        </p>
         <div className="mt-2 flex flex-wrap gap-2">
           {holiday.is_official_public_holiday && <Badge variant="holiday">{t("official")}</Badge>}
           <Badge>{t(`categories.${holiday.category}`)}</Badge>
@@ -99,20 +96,6 @@ export default async function HolidayDetailPage({ params }: { params: Params }) 
               <dt className="text-sm text-muted">{t("status")}</dt>
               <dd>{tv(`status.${holiday.verification_status}`)}</dd>
             </div>
-            {holiday.source && (
-              <div>
-                <dt className="text-sm text-muted">{t("source")}</dt>
-                <dd>
-                  {holiday.source.source_url ? (
-                    <a href={holiday.source.source_url} className="text-primary hover:underline" rel="noopener noreferrer" target="_blank">
-                      {holiday.source.name}
-                    </a>
-                  ) : (
-                    holiday.source.name
-                  )}
-                </dd>
-              </div>
-            )}
             {holiday.updated_at && (
               <div>
                 <dt className="text-sm text-muted">{t("lastUpdated")}</dt>

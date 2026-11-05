@@ -19,6 +19,8 @@
   --forest: #174a35;
   --primary: #23834b;
   --primary-hover: #1c6c3d;
+  /* Primary as text (links, accents). */
+  --primary-text: #23834b;
   --primary-foreground: #ffffff;
   --sage: #eaf2e8;
 
@@ -28,6 +30,9 @@
 
   --holiday: #b4483d;
   --holiday-soft: #fbebe7;
+
+  /* Commemorations and other non-holiday events. */
+  --event: #2f5fa8;
 
   --ring: #23834b;
 
@@ -49,6 +54,7 @@
   --forest: #cfe3d4;
   --primary: #5fbf86;
   --primary-hover: #7bcf9c;
+  --primary-text: #5fbf86;
   --primary-foreground: #0d1611;
   --sage: #1d3427;
 
@@ -58,6 +64,8 @@
 
   --holiday: #f0907f;
   --holiday-soft: #3a211d;
+
+  --event: #8fb2ea;
 
   --ring: #7bcf9c;
 
@@ -78,12 +86,14 @@
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-text: var(--primary-text);
   --color-sage: var(--sage);
   --color-gold: var(--gold);
   --color-gold-text: var(--gold-text);
   --color-gold-soft: var(--gold-soft);
   --color-holiday: var(--holiday);
   --color-holiday-soft: var(--holiday-soft);
+  --color-event: var(--event);
   --color-ring: var(--ring);
   /* Rubik has no Khmer glyphs, so Khmer text falls through to Battambang per character. */
   --font-sans: var(--font-rubik), var(--font-battambang), "Noto Sans Khmer", system-ui, sans-serif;

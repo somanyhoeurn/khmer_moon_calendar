@@ -128,8 +128,8 @@ class HolidayService:
                 EventOut(
                     slug=fixed.slug,
                     expected_public_holiday=is_expected_public_holiday(fixed.rule.key, year),
-                    title_km=fixed.rule.title_km,
-                    title_en=fixed.rule.title_en,
+                    title_km=fixed.title_km,
+                    title_en=fixed.title_en,
                     event_type="commemoration",
                     category=fixed.rule.category,
                     start_date=fixed.day,

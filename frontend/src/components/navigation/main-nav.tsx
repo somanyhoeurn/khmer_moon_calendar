@@ -9,8 +9,8 @@ import { Link, usePathname } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils/cn";
 
 const ITEMS = [
-  { href: "/", key: "home" },
-  { href: "/calendar", key: "calendar" },
+  // The calendar is the start page; its month and year URLs also live under /calendar.
+  { href: "/", key: "calendar" },
   { href: "/holidays", key: "holidays" },
   { href: "/lunar-date", key: "converter" },
 ] as const;
@@ -21,7 +21,8 @@ export function MainNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
-  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" || pathname.startsWith("/calendar") : pathname.startsWith(href);
 
   const links = (mobile: boolean) =>
     ITEMS.map((item) => (

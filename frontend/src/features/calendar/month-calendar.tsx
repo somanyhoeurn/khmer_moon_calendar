@@ -3,12 +3,12 @@
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
-import { CalendarLegend } from "@/components/calendar/calendar-legend";
 import { DayDialog } from "@/components/calendar/day-dialog";
 import { MonthAgenda } from "@/components/calendar/month-agenda";
 import { MonthGrid } from "@/components/calendar/month-grid";
 import { MonthYearPicker } from "@/components/calendar/month-year-picker";
 import { ViewSwitch } from "@/components/calendar/view-switch";
+import { HeaderActions } from "@/components/layout/site-header";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/form-controls";
 import { useCalendarMonth } from "@/lib/api/queries";
@@ -72,29 +72,32 @@ export function MonthCalendar({
   const unique = (values: string[]) => Array.from(new Set(values)).join(" – ");
   const lunarMonths = data ? unique(data.days.map((d) => (km ? d.lunar.month.name_km : d.lunar.month.name_en))) : "";
   const beYears = data ? unique(data.days.map((d) => localizeNumber(d.lunar.be_year, locale))) : "";
+  // The animal year changes at Khmer New Year, so April can span two.
+  const animalYears = data
+    ? unique(data.days.map((d) => t("animalYearOf", { animal: km ? d.lunar.animal_year.name_km : d.lunar.animal_year.name_en })))
+    : "";
 
   return (
     <section aria-labelledby="calendar-title" className="xl:flex xl:h-full xl:flex-col">
       {/* Compact toolbar: one row on desktop, wraps on small screens. */}
-      <div className="mb-3 flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2">
-        <div className="min-w-0 grow sm:grow-0">
-          <h2 id="calendar-title" aria-live="polite" className="text-2xl font-semibold leading-tight text-forest lg:text-[1.75rem]">
+      <div className="mb-2 flex shrink-0 flex-wrap items-center gap-x-4 gap-y-2">
+        {/* Desktop: the lunar summary sits beside the title, keeping the toolbar to one short row. */}
+        <div className="min-w-0 grow sm:grow-0 lg:flex lg:items-center lg:gap-3">
+          <h2 id="calendar-title" aria-live="polite" className="text-xl font-semibold leading-tight text-forest lg:text-2xl">
             {/* The title opens the "choose month and year" dialog. */}
             <MonthYearPicker year={year} month={month} onSave={go}>
               <span>
-                {monthName(month, locale)}{" "}
-                <span lang={km ? "en" : "km"} className="font-medium text-muted">
-                  {monthName(month, km ? "en" : "km")}
-                </span>{" "}
-                {localizeNumber(year, locale)}
+                {monthName(month, locale)} {localizeNumber(year, locale)}
               </span>
               <ChevronDown className="h-5 w-5 shrink-0 text-muted" aria-hidden />
             </MonthYearPicker>
           </h2>
-          <p className="min-h-5 text-sm leading-snug text-gold-text">
+          <p className="min-h-5 text-sm leading-snug text-gold-text lg:whitespace-nowrap">
             {data && (
               <>
                 {t("lunarMonthsInView", { months: lunarMonths })}
+                <span aria-hidden> · </span>
+                {animalYears}
                 <span aria-hidden> · </span>
                 {t("beYearShort", { year: beYears })}
               </>
@@ -128,8 +131,10 @@ export function MonthCalendar({
           </Button>
         </div>
 
-        <div className="sm:ml-auto">
+        {/* The site header is hidden on this page; its navigation, language and theme controls live here. */}
+        <div className="flex items-center gap-2 sm:ml-auto">
           <ViewSwitch year={year} month={month} active="month" />
+          <HeaderActions />
         </div>
       </div>
 
@@ -143,7 +148,7 @@ export function MonthCalendar({
             </div>
           ) : !data ? (
             <div role="status" aria-label={t("loading")} className="grid grid-cols-7 gap-px overflow-hidden rounded-xl border border-border bg-border">
-              {Array.from({ length: 35 }, (_, i) => (
+              {Array.from({ length: 42 }, (_, i) => (
                 <Skeleton key={i} className="h-[4.5rem] rounded-none sm:h-28 lg:h-36" />
               ))}
             </div>
@@ -162,7 +167,6 @@ export function MonthCalendar({
               />
             </div>
           )}
-          <CalendarLegend className="mt-3 flex shrink-0 flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted" />
         </div>
 
         {/* On wide screens the agenda matches the grid's height and scrolls on its own. */}

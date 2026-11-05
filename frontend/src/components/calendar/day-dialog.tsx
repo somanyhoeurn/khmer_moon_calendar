@@ -9,18 +9,13 @@ import { VerificationBadge } from "@/components/lunar-date/verification-badge";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
-import { dayMarkers, recordDescription } from "@/lib/calendar/observances";
+import { dayMarkers, recordDescription, recordTitle } from "@/lib/calendar/observances";
 import { formatRange, localizeNumber, lunarLong, monthName } from "@/lib/date/format";
 import { Link } from "@/lib/i18n/navigation";
 import { cn } from "@/lib/utils/cn";
 import type { CalendarDay, CalendarEvent, Holiday } from "@/types/api";
 
 type Tone = "holiday" | "buddhist" | "other";
-
-function bilingual(record: Holiday | CalendarEvent, km: boolean): { primary: string; secondary: string } {
-  const [kmName, enName] = "name_en" in record ? [record.name_km, record.name_en] : [record.title_km, record.title_en];
-  return km ? { primary: kmName, secondary: enName } : { primary: enName, secondary: kmName };
-}
 
 /** Full details for one day, opened by clicking a date in the grid or the month list. */
 export function DayDialog({
@@ -45,7 +40,6 @@ export function DayDialog({
   if (!day) return null;
   const { lunar } = day;
   const [y, m, d] = day.date.split("-").map(Number) as [number, number, number];
-  const other = km ? "en" : "km";
 
   const title = t("dayTitle", {
     weekday: km ? lunar.weekday.name_km : lunar.weekday.name_en,
@@ -53,7 +47,6 @@ export function DayDialog({
     month: monthName(m, locale),
     year: localizeNumber(y, locale),
   });
-  const otherDate = km ? `${monthName(m, "en")} ${d}, ${y}` : `${localizeNumber(d, "km")} ${monthName(m, "km")} ${localizeNumber(y, "km")}`;
 
   const qualities = [lunar.is_sila_day && t("silaDay"), lunar.is_full_moon && t("fullMoon"), lunar.is_new_moon && t("newMoon"), lunar.is_shaving_day && t("shavingDay")].filter(
     (q): q is string => Boolean(q),
@@ -73,7 +66,7 @@ export function DayDialog({
   ];
 
   const copy = async () => {
-    const text = [title, lunarLong(lunar, locale), ...records.map(({ record }) => bilingual(record, km).primary)].join("\n");
+    const text = [title, lunarLong(lunar, locale), ...records.map(({ record }) => recordTitle(record, locale))].join("\n");
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
@@ -94,9 +87,6 @@ export function DayDialog({
             {qualities.length > 0 && (
               <p className="font-medium text-gold-text">{t("dayIs", { list: qualities.join(t("listAnd")) })}</p>
             )}
-            <p lang={other} className="text-sm text-muted">
-              {otherDate}
-            </p>
           </div>
           {lunar.is_sila_day ? (
             <BuddhaLogo framed className="h-16 w-16" />
@@ -119,7 +109,6 @@ export function DayDialog({
         ) : (
           <ul className="space-y-2">
             {records.map(({ record, tone }) => {
-              const names = bilingual(record, km);
               const description = recordDescription(record, locale);
               return (
                 <li
@@ -141,8 +130,7 @@ export function DayDialog({
                           tone === "other" && "text-forest",
                         )}
                       >
-                        <span className="font-semibold">{names.primary}</span>{" "}
-                        <span lang={other}>({names.secondary})</span>
+                        <span className="font-semibold">{recordTitle(record, locale)}</span>
                       </span>
                     </p>
                     {tone === "holiday" && (
@@ -158,7 +146,7 @@ export function DayDialog({
                     <Link
                       href={`/holidays/${record.slug}`}
                       onClick={() => onOpenChange(false)}
-                      className="mt-1 inline-block text-xs font-medium text-primary hover:underline"
+                      className="mt-1 inline-block text-xs font-medium text-primary-text hover:underline"
                     >
                       {t("openHoliday")} →
                     </Link>

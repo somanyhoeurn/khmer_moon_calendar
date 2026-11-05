@@ -63,5 +63,6 @@ flowchart TB
 
 - [ADR 0001 – Port MomentKH's Chhankitek algorithm to Python](decisions/0001-calendar-engine.md)
 - [ADR 0002 – Separate calculated dates, references and official holidays](decisions/0002-data-provenance.md)
-- [ADR 0003 – Single FastAPI service with PostgreSQL; no Redis yet](decisions/0003-no-redis.md)
+- [ADR 0003 – Single FastAPI service with PostgreSQL; no Redis yet](decisions/0003-no-redis.md) (superseded)
 - [ADR 0004 – TanStack Query for all frontend data fetching](decisions/0004-tanstack-query.md)
+- [ADR 0005 – Redis response cache](decisions/0005-redis-response-cache.md)

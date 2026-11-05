@@ -15,8 +15,12 @@ export function isCoveredByHoliday(event: CalendarEvent, holidays: Holiday[]): b
     (h) =>
       h.slug === event.slug ||
       (h.lunar_rule !== null && event.slug === `${h.lunar_rule}-${h.start_date.slice(0, 4)}`) ||
-      // Fixed-date commemorations defer to the published holiday on the same day (e.g. Labour Day + Visak 2026).
-      (event.origin === "date_rule" && h.start_date <= event.start_date && h.end_date >= event.start_date) ||
+      // Fixed-date days that are normally public holidays defer to the published holiday on the same day
+      // (e.g. Labour Day + Visak 2026); other commemorations, such as UNESCO anniversaries, still show.
+      (event.origin === "date_rule" &&
+        event.expected_public_holiday === true &&
+        h.start_date <= event.start_date &&
+        h.end_date >= event.start_date) ||
       (event.origin === "songkran_calculation" && h.slug === `khmer-new-year-${year}`),
   );
 }

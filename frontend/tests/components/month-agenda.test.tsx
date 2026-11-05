@@ -9,13 +9,13 @@ import { renderWithProviders } from "../utils";
 const month = october as CalendarMonth;
 
 describe("MonthAgenda", () => {
-  it("lists the month's records per day in both languages and selects a day", async () => {
+  it("lists the month's records per day in the current language and selects a day", async () => {
     const onSelect = vi.fn();
     renderWithProviders(<MonthAgenda days={month.days} holidays={month.holidays} events={month.events} onSelect={onSelect} />, {
       locale: "km",
     });
     // Pchum Ben spans 10–12 October: one row per day, each listed once (holiday, not the calculated duplicate).
-    expect(screen.getAllByText("(Pchum Ben Festival)")).toHaveLength(3);
+    expect(screen.getAllByText("ពិធីបុណ្យភ្ជុំបិណ្ឌ")).toHaveLength(3);
     expect(screen.getAllByRole("button")).toHaveLength(5);
 
     await userEvent.click(screen.getAllByRole("button")[4]!);

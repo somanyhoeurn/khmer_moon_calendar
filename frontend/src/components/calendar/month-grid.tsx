@@ -76,7 +76,8 @@ export function MonthGrid({
     ...Array.from({ length: leading }, (_, i): Cell => ({ kind: "adjacent", label: previousMonthLength - leading + i + 1 })),
     ...days.map((day): Cell => ({ kind: "day", day })),
   ];
-  for (let next = 1; cells.length % 7 !== 0; next++) cells.push({ kind: "adjacent", label: next });
+  // Always six weeks, so the grid keeps the same shape from month to month.
+  for (let next = 1; cells.length < 42; next++) cells.push({ kind: "adjacent", label: next });
   const weeks = Array.from({ length: cells.length / 7 }, (_, i) => cells.slice(i * 7, i * 7 + 7));
 
   const focusIndex = (index: number) => {
@@ -229,7 +230,6 @@ export function MonthGrid({
                             isBuddhist && "bg-gold-soft hover:bg-gold-soft/70",
                             isHoliday && "bg-holiday-soft hover:bg-holiday-soft/70",
                             day.is_today && "bg-sage hover:bg-sage/80",
-                            selected && "z-1 ring-2 ring-inset ring-forest",
                           )}
                         >
                           {/* Semantic edge accents: emerald for today, coral for holidays, gold for Buddhist days. */}
@@ -243,29 +243,37 @@ export function MonthGrid({
                             />
                           )}
 
-                          <span className={cn("flex w-full items-start justify-between gap-1", compact && "justify-center")}>
-                            <span
-                              className={cn(
-                                "inline-flex items-center justify-center rounded-full font-semibold leading-none tabular-nums",
-                                compact
-                                  ? "h-6 w-6 text-xs"
-                                  : "h-8 w-8 text-base sm:h-9 sm:w-9 sm:text-lg lg:h-11 lg:w-11 lg:text-2xl",
-                                day.is_today ? "bg-primary text-primary-foreground" : "text-forest",
-                                !day.is_today && (isHoliday || isWeekend) && "text-holiday",
+                          <span className={cn("flex w-full items-center justify-between gap-1", compact && "justify-center")}>
+                            <span className="flex items-center gap-1">
+                              <span
+                                className={cn(
+                                  "inline-flex items-center justify-center rounded-full font-semibold leading-none tabular-nums",
+                                  compact
+                                    ? "h-6 w-6 text-xs"
+                                    : "h-8 w-8 text-base sm:h-9 sm:w-9 sm:text-lg lg:h-11 lg:w-11 lg:text-2xl",
+                                  day.is_today ? "bg-primary text-primary-foreground" : "text-forest",
+                                  !day.is_today && (isHoliday || isWeekend) && "text-holiday",
+                                )}
+                              >
+                                {localizeNumber(Number(day.date.slice(8)), locale)}
+                              </span>
+                              {!compact && markers.isPreceptDay && (
+                                <BuddhaLogo variant="mark" className="hidden h-5 w-5 shrink-0 text-gold-text sm:block" />
                               )}
-                            >
-                              {localizeNumber(Number(day.date.slice(8)), locale)}
                             </span>
                             {!compact && (
-                              <span className="mt-1 flex items-center gap-1">
-                                {markers.isPreceptDay && <BuddhaLogo variant="mark" className="hidden h-5 w-5 text-gold-text sm:block" />}
+                              <span className="flex items-center gap-1.5">
+                                {/* Desktop: the lunar day sits beside the moon, freeing a line for event labels. */}
+                                <span className="hidden whitespace-nowrap text-[15px] leading-snug text-muted lg:inline">
+                                  {localizeNumber(day.lunar.lunar_day, locale)} {phaseName(day.lunar, locale)}
+                                </span>
                                 <MoonPhaseIcon lunar={day.lunar} className="hidden sm:block sm:h-4 sm:w-4 lg:h-5 lg:w-5" />
                               </span>
                             )}
                           </span>
 
                           {!compact && (
-                            <span className="flex items-center gap-0.5 text-xs leading-snug text-muted sm:block sm:text-sm lg:text-[15px]">
+                            <span className="flex items-center gap-0.5 text-xs leading-snug text-muted sm:block sm:text-sm lg:hidden">
                               {/* Narrow cells: the moon glyph sits beside the lunar day and stands in for the phase word. */}
                               <MoonPhaseIcon lunar={day.lunar} className="h-2.5 w-2.5 sm:hidden" />
                               {localizeNumber(day.lunar.lunar_day, locale)}
@@ -291,31 +299,22 @@ export function MonthGrid({
                                 <span className="flex gap-1 sm:hidden">
                                   {isHoliday && <span className="h-1.5 w-1.5 rounded-full bg-holiday" />}
                                   {isBuddhist && <BuddhaLogo variant="mark" className="h-3 w-3 text-gold-text" />}
-                                  {markers.other.length > 0 && <span className="h-1.5 w-1.5 rounded-full bg-muted" />}
+                                  {markers.other.length > 0 && <span className="h-1.5 w-1.5 rounded-full bg-event" />}
                                 </span>
-                                {/* Tablet: one label; desktop: up to two, each wrapping to at most two lines. */}
+                                {/* Tablet: one label; desktop: up to two. One-line tinted chips; the tooltip has full titles. */}
                                 {labels.slice(0, 2).map((item, i) => (
                                   <span
                                     key={item.key}
                                     className={cn(
-                                      "hidden items-start gap-1 text-[11px] font-medium leading-tight lg:text-xs",
+                                      "hidden min-w-0 items-center gap-1 rounded-sm px-1 py-0.5 text-[11px] font-medium leading-[1.8] lg:text-xs",
                                       i === 0 ? "sm:flex" : "lg:flex",
-                                      item.tone === "holiday" && "text-holiday",
-                                      item.tone === "buddhist" && "text-gold-text",
-                                      item.tone === "other" && "text-muted",
+                                      item.tone === "holiday" && "bg-holiday/15 text-holiday",
+                                      item.tone === "buddhist" && "bg-gold/15 text-gold-text",
+                                      item.tone === "other" && "bg-event/15 text-event",
                                     )}
                                   >
-                                    {item.tone === "buddhist" ? (
-                                      <BuddhaLogo variant="mark" className="h-3.5 w-3.5 shrink-0" />
-                                    ) : (
-                                      <span
-                                        className={cn(
-                                          "mt-1 h-1.5 w-1.5 shrink-0 rounded-full",
-                                          item.tone === "holiday" ? "bg-holiday" : "bg-muted",
-                                        )}
-                                      />
-                                    )}
-                                    <span className="line-clamp-2 min-w-0 hyphens-auto wrap-break-word">{item.text}</span>
+                                    {item.tone === "buddhist" && <BuddhaLogo variant="mark" className="h-3.5 w-3.5 shrink-0" />}
+                                    <span className="min-w-0 truncate">{item.text}</span>
                                   </span>
                                 ))}
                                 {labels.length > 1 && (

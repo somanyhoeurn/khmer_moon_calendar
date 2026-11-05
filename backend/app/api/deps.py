@@ -8,6 +8,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
+from app.core.cache import ResponseCache, get_cache
 from app.core.config import Settings, get_settings
 from app.db.repositories import (
     CalendarEventRepository,
@@ -24,6 +25,7 @@ from app.services.lunar_date_service import LunarDateService
 DbSession = Annotated[Session, Depends(get_db)]
 AppSettings = Annotated[Settings, Depends(get_settings)]
 Engine = Annotated[ChhankitekEngine, Depends(get_engine)]
+Cache = Annotated[ResponseCache, Depends(get_cache)]
 
 
 def get_lunar_date_service(db: DbSession, engine: Engine) -> LunarDateService:

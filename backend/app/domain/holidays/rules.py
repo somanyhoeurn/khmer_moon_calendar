@@ -14,6 +14,7 @@ from functools import lru_cache
 
 from app.domain.calendar.constants import LunarMonth, MoonPhase, to_khmer_numerals
 from app.domain.calendar.engine import ChhankitekEngine
+from app.domain.calendar.formatting import ordinal
 
 
 @dataclass(frozen=True)
@@ -57,6 +58,8 @@ class FixedDateRule:
     category: str
     since: int | None = None
     until: int | None = None
+    # Show the anniversary count since ``since`` in the title (e.g. "73rd anniversary").
+    numbered: bool = False
 
     def applies(self, year: int) -> bool:
         return (self.since is None or year >= self.since) and (self.until is None or year <= self.until)
@@ -70,6 +73,22 @@ class FixedDateOccurrence:
     @property
     def slug(self) -> str:
         return f"{self.rule.key}-{self.day.year}"
+
+    @property
+    def anniversary(self) -> int | None:
+        if not self.rule.numbered or self.rule.since is None or self.day.year <= self.rule.since:
+            return None
+        return self.day.year - self.rule.since
+
+    @property
+    def title_km(self) -> str:
+        n = self.anniversary
+        return self.rule.title_km if n is None else f"{self.rule.title_km} ខួបលើកទី{to_khmer_numerals(n)}"
+
+    @property
+    def title_en(self) -> str:
+        n = self.anniversary
+        return self.rule.title_en if n is None else f"{self.rule.title_en} ({ordinal(n)} anniversary)"
 
 
 def _kan_ben_rule(n: int) -> LunarObservanceRule:
@@ -278,7 +297,9 @@ FIXED_DATE_OBSERVANCES: tuple[FixedDateRule, ...] = (
         "royal",
         until=2012,
     ),
-    FixedDateRule("independence-day", "ពិធីបុណ្យឯករាជ្យជាតិ", "Independence Day", 11, 9, "national", since=1953),
+    FixedDateRule(
+        "independence-day", "ពិធីបុណ្យឯករាជ្យជាតិ", "Independence Day", 11, 9, "national", since=1953, numbered=True
+    ),
     FixedDateRule(
         "human-rights-day", "ទិវាសិទ្ធិមនុស្សអន្តរជាតិ", "International Human Rights Day", 12, 10, "international"
     ),
@@ -298,6 +319,139 @@ FIXED_DATE_OBSERVANCES: tuple[FixedDateRule, ...] = (
     FixedDateRule("halloween", "បុណ្យហាឡូវីន", "Halloween", 10, 31, "international"),
     FixedDateRule("christmas-day", "បុណ្យណូអែល", "Christmas Day", 12, 25, "international"),
     FixedDateRule("peace-day", "ទិវាសន្តិភាពនៅកម្ពុជា", "Peace Day in Cambodia", 12, 29, "national", since=2024),
+    FixedDateRule(
+        "national-day-of-remembrance", "ទិវាជាតិនៃការចងចាំ", "National Day of Remembrance", 5, 20, "national"
+    ),
+    # International days widely observed in Cambodia (not days off).
+    FixedDateRule("world-water-day", "ទិវាទឹកពិភពលោក", "World Water Day", 3, 22, "international"),
+    FixedDateRule("world-health-day", "ទិវាសុខភាពពិភពលោក", "World Health Day", 4, 7, "international"),
+    FixedDateRule("earth-day", "ទិវាផែនដី", "Earth Day", 4, 22, "international"),
+    FixedDateRule("world-environment-day", "ទិវាបរិស្ថានពិភពលោក", "World Environment Day", 6, 5, "international"),
+    FixedDateRule(
+        "international-day-of-peace", "ទិវាសន្តិភាពអន្តរជាតិ", "International Day of Peace", 9, 21, "international"
+    ),
+    FixedDateRule("world-tourism-day", "ទិវាទេសចរណ៍ពិភពលោក", "World Tourism Day", 9, 27, "international"),
+    FixedDateRule("world-aids-day", "ទិវាពិភពលោកប្រយុទ្ធនឹងជំងឺអេដស៍", "World AIDS Day", 12, 1, "international"),
+    FixedDateRule(
+        "international-day-of-persons-with-disabilities",
+        "ទិវាជនពិការអន្តរជាតិ",
+        "International Day of Persons with Disabilities",
+        12,
+        3,
+        "international",
+    ),
+    # Anniversaries of Cambodian inscriptions on UNESCO's heritage lists.
+    FixedDateRule(
+        "angkor-world-heritage",
+        "រមណីយដ្ឋានអង្គរ ចុះក្នុងបញ្ជីបេតិកភណ្ឌពិភពលោក",
+        "Angkor inscribed as a UNESCO World Heritage Site",
+        12,
+        14,
+        "cultural",
+        since=1992,
+        numbered=True,
+    ),
+    FixedDateRule(
+        "royal-ballet-heritage",
+        "របាំព្រះរាជទ្រព្យ ចុះក្នុងបញ្ជីបេតិកភណ្ឌវប្បធម៌អរូបីនៃមនុស្សជាតិ",
+        "Royal Ballet of Cambodia inscribed as UNESCO Intangible Cultural Heritage",
+        11,
+        7,
+        "cultural",
+        since=2003,
+        numbered=True,
+    ),
+    FixedDateRule(
+        "sbek-thom-heritage",
+        "ល្ខោនស្បែកធំ ចុះក្នុងបញ្ជីបេតិកភណ្ឌវប្បធម៌អរូបីនៃមនុស្សជាតិ",
+        "Sbek Thom (Khmer shadow theatre) inscribed as UNESCO Intangible Cultural Heritage",
+        11,
+        25,
+        "cultural",
+        since=2005,
+        numbered=True,
+    ),
+    FixedDateRule(
+        "preah-vihear-world-heritage",
+        "ប្រាសាទព្រះវិហារ ចុះក្នុងបញ្ជីបេតិកភណ្ឌពិភពលោក",
+        "Temple of Preah Vihear inscribed as a UNESCO World Heritage Site",
+        7,
+        7,
+        "cultural",
+        since=2008,
+        numbered=True,
+    ),
+    FixedDateRule(
+        "tugging-rituals-heritage",
+        "ល្បែងទាញព្រ័ត្រ ចុះក្នុងបញ្ជីបេតិកភណ្ឌវប្បធម៌អរូបីនៃមនុស្សជាតិ",
+        "Tugging rituals and games inscribed as UNESCO Intangible Cultural Heritage",
+        12,
+        2,
+        "cultural",
+        since=2015,
+        numbered=True,
+    ),
+    FixedDateRule(
+        "chapei-dang-veng-heritage",
+        "ចាប៉ីដងវែង ចុះក្នុងបញ្ជីបេតិកភណ្ឌវប្បធម៌អរូបីដែលត្រូវការការការពារជាបន្ទាន់",
+        "Chapei Dang Veng inscribed as UNESCO Intangible Cultural Heritage in Need of Urgent Safeguarding",
+        11,
+        30,
+        "cultural",
+        since=2016,
+        numbered=True,
+    ),
+    FixedDateRule(
+        "sambor-prei-kuk-world-heritage",
+        "ប្រាសាទសំបូរព្រៃគុក ចុះក្នុងបញ្ជីបេតិកភណ្ឌពិភពលោក",
+        "Sambor Prei Kuk inscribed as a UNESCO World Heritage Site",
+        7,
+        8,
+        "cultural",
+        since=2017,
+        numbered=True,
+    ),
+    FixedDateRule(
+        "lkhon-khol-heritage",
+        "ល្ខោនខោលវត្តស្វាយអណ្ដែត ចុះក្នុងបញ្ជីបេតិកភណ្ឌវប្បធម៌អរូបីដែលត្រូវការការការពារជាបន្ទាន់",
+        "Lkhon Khol Wat Svay Andet inscribed as UNESCO Intangible Cultural Heritage "
+        "in Need of Urgent Safeguarding",
+        11,
+        28,
+        "cultural",
+        since=2018,
+        numbered=True,
+    ),
+    FixedDateRule(
+        "kun-lbokator-heritage",
+        "គុនល្បុក្កតោ ចុះក្នុងបញ្ជីបេតិកភណ្ឌវប្បធម៌អរូបីនៃមនុស្សជាតិ",
+        "Kun Lbokator inscribed as UNESCO Intangible Cultural Heritage",
+        11,
+        29,
+        "cultural",
+        since=2022,
+        numbered=True,
+    ),
+    FixedDateRule(
+        "koh-ker-world-heritage",
+        "ប្រាសាទកោះកេរ ចុះក្នុងបញ្ជីបេតិកភណ្ឌពិភពលោក",
+        "Koh Ker inscribed as a UNESCO World Heritage Site",
+        9,
+        17,
+        "cultural",
+        since=2023,
+        numbered=True,
+    ),
+    FixedDateRule(
+        "memorial-sites-world-heritage",
+        "ទីតាំងរំលឹកទួលស្លែង ជើងឯក និង M-13 ចុះក្នុងបញ្ជីបេតិកភណ្ឌពិភពលោក",
+        "Cambodian memorial sites (Tuol Sleng, Choeung Ek, M-13) inscribed as a UNESCO World Heritage Site",
+        7,
+        11,
+        "cultural",
+        since=2025,
+        numbered=True,
+    ),
 )
 
 

@@ -6,7 +6,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Path, Query
 
-from app.api.deps import Holidays
+from app.api.deps import Cache, Holidays
 from app.models.enums import HolidayCategory
 from app.schemas import ErrorResponse, EventOut, HolidayOut
 
@@ -22,10 +22,16 @@ YearParam = Annotated[int, Query(ge=1900, le=2100, examples=[2026])]
 )
 def list_holidays(
     service: Holidays,
+    cache: Cache,
     year: YearParam,
     category: Annotated[HolidayCategory | None, Query()] = None,
 ) -> list[HolidayOut]:
-    return service.holidays_for_year(year, category.value if category else None)
+    category_value = category.value if category else None
+    return cache.get_or_set(
+        f"holidays:{year}:{category_value or 'all'}",
+        list[HolidayOut],
+        lambda: service.holidays_for_year(year, category_value),
+    )
 
 
 @router.get(
@@ -34,8 +40,10 @@ def list_holidays(
     responses={404: {"model": ErrorResponse}},
     summary="Holiday detail",
 )
-def get_holiday(service: Holidays, slug: Annotated[str, Path(pattern=r"^[a-z0-9-]{1,160}$")]) -> HolidayOut:
-    return service.holiday(slug)
+def get_holiday(
+    service: Holidays, cache: Cache, slug: Annotated[str, Path(pattern=r"^[a-z0-9-]{1,160}$")]
+) -> HolidayOut:
+    return cache.get_or_set(f"holiday:{slug}", HolidayOut, lambda: service.holiday(slug))
 
 
 @router.get(
@@ -46,6 +54,7 @@ def get_holiday(service: Holidays, slug: Annotated[str, Path(pattern=r"^[a-z0-9-
 )
 def list_events(
     service: Holidays,
+    cache: Cache,
     year: YearParam,
     month: Annotated[int | None, Query(ge=1, le=12, examples=[10])] = None,
 ) -> list[EventOut]:
@@ -54,4 +63,5 @@ def list_events(
     else:
         start = date(year, month, 1)
         end = date(year, month, calendar.monthrange(year, month)[1])
-    return service.events_in_range(start, end)
+    key = f"events:{year}:{month or 'all'}"
+    return cache.get_or_set(key, list[EventOut], lambda: service.events_in_range(start, end))

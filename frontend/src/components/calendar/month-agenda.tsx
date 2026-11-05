@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { BuddhaLogo } from "@/components/branding/buddha-logo";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { dayMarkers } from "@/lib/calendar/observances";
+import { dayMarkers, recordTitle } from "@/lib/calendar/observances";
 import { WEEKDAYS_LONG_KM, WEEKDAYS_SHORT_EN, localizeNumber } from "@/lib/date/format";
 import { cn } from "@/lib/utils/cn";
 import type { CalendarDay, CalendarEvent, Holiday } from "@/types/api";
@@ -13,13 +13,7 @@ type Tone = "holiday" | "buddhist" | "other";
 interface AgendaItem {
   key: string;
   tone: Tone;
-  primary: string;
-  secondary: string;
-}
-
-function names(record: Holiday | CalendarEvent, km: boolean): { primary: string; secondary: string } {
-  const [kmName, enName] = "name_en" in record ? [record.name_km, record.name_en] : [record.title_km, record.title_en];
-  return km ? { primary: kmName, secondary: enName } : { primary: enName, secondary: kmName };
+  title: string;
 }
 
 /** Chronological list of every holiday and observance in the visible month, beside the grid. */
@@ -43,9 +37,9 @@ export function MonthAgenda({
     .map((day) => {
       const markers = dayMarkers(day, holidays, events);
       const items: AgendaItem[] = [
-        ...markers.publicHolidays.map((r) => ({ key: r.slug, tone: "holiday" as const, ...names(r, km) })),
-        ...markers.buddhist.map((r) => ({ key: r.slug, tone: "buddhist" as const, ...names(r, km) })),
-        ...markers.other.map((r) => ({ key: r.slug, tone: "other" as const, ...names(r, km) })),
+        ...markers.publicHolidays.map((r) => ({ key: r.slug, tone: "holiday" as const, title: recordTitle(r, locale) })),
+        ...markers.buddhist.map((r) => ({ key: r.slug, tone: "buddhist" as const, title: recordTitle(r, locale) })),
+        ...markers.other.map((r) => ({ key: r.slug, tone: "other" as const, title: recordTitle(r, locale) })),
       ];
       return { day, items };
     })
@@ -69,10 +63,7 @@ export function MonthAgenda({
                   type="button"
                   onClick={() => onSelect(day.date)}
                   aria-pressed={selected}
-                  className={cn(
-                    "flex w-full cursor-pointer items-center gap-3 rounded-lg px-1 py-1.5 text-left transition-colors hover:bg-surface-muted",
-                    selected && "bg-sage hover:bg-sage",
-                  )}
+                  className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-1 py-1.5 text-left transition-colors hover:bg-surface-muted"
                 >
                   <span className="flex w-14 shrink-0 flex-col items-center justify-center leading-tight">
                     {/* Public holidays: the date is red like the holiday name. */}
@@ -89,24 +80,20 @@ export function MonthAgenda({
                       {localizeNumber(Number(day.date.slice(8)), locale)}
                     </span>
                   </span>
-                  {/* Plain names (no boxes), centred against the date; colour and icon still mark the kind. */}
-                  <span className="flex min-w-0 grow flex-col justify-center gap-1">
+                  {/* One block per record, each with a coloured edge so several on a day stay distinct. */}
+                  <span className="flex min-w-0 grow flex-col justify-center gap-2">
                     {items.map((item) => (
-                      <span key={item.key} className="flex items-start gap-1.5 text-sm">
-                        {item.tone === "buddhist" && <BuddhaLogo variant="mark" className="mt-0.5 h-4 w-4 shrink-0 text-gold-text" />}
-                        <span className="min-w-0">
-                          {/* Both names share the record's colour: red for public holidays, gold for Buddhist days. */}
-                          <span
-                            className={cn(
-                              item.tone === "holiday" && "text-holiday",
-                              item.tone === "buddhist" && "text-gold-text",
-                              item.tone === "other" && "text-forest",
-                            )}
-                          >
-                            <span className="font-medium">{item.primary}</span>{" "}
-                            <span lang={km ? "en" : "km"}>({item.secondary})</span>
-                          </span>
-                        </span>
+                      <span
+                        key={item.key}
+                        className={cn(
+                          "flex items-start gap-1.5 border-l-2 pl-2",
+                          item.tone === "holiday" && "border-holiday text-holiday",
+                          item.tone === "buddhist" && "border-gold text-gold-text",
+                          item.tone === "other" && "border-event text-event",
+                        )}
+                      >
+                        {item.tone === "buddhist" && <BuddhaLogo variant="mark" className="mt-0.5 h-4 w-4 shrink-0" />}
+                        <span className="min-w-0 text-sm font-medium">{item.title}</span>
                       </span>
                     ))}
                   </span>

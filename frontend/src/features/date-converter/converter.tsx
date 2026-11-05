@@ -69,7 +69,7 @@ function ResultCard({ lunar, events }: { lunar: LunarDate; events: CalendarEvent
   return (
     <div className="space-y-3 rounded-lg border border-border bg-surface-muted/50 p-4" data-testid="conversion-result">
       <p className="text-lg font-semibold">{formatGregorian(lunar.gregorian_date, locale)}</p>
-      <p className="text-xl text-primary">{lunarLong(lunar, locale)}</p>
+      <p className="text-xl text-primary-text">{lunarLong(lunar, locale)}</p>
       <VerificationBadge verification={lunar.verification} showHint />
       {related.length > 0 && (
         <div>

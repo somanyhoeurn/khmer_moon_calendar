@@ -39,8 +39,8 @@ describe("MonthCalendar", () => {
     await userEvent.click(within(dialog).getByRole("button", { name: "Close" }));
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(cell).toHaveAttribute("aria-pressed", "true");
-    const agendaRow = screen.getAllByRole("button", { pressed: true }).find((b) => !b.dataset.date);
-    expect(agendaRow).toHaveTextContent("Pchum Ben Festival");
+    const agenda = screen.getByRole("region", { name: "This month" });
+    expect(within(agenda).getByRole("button", { pressed: true })).toHaveTextContent("Pchum Ben Festival");
   });
 
   it("shows an error state with retry", async () => {

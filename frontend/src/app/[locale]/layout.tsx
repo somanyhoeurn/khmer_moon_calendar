@@ -81,7 +81,7 @@ export default async function LocaleLayout({
           <Providers>
             <ThemeSync />
             <SiteHeader />
-            <main id="main" className="mx-auto w-full flex-1 px-4 py-4 lg:px-6 xl:min-h-0 xl:overflow-y-auto">
+            <main id="main" className="mx-auto w-full flex-1 px-4 py-4 lg:px-6 xl:min-h-0 xl:overflow-y-auto xl:py-3">
               {children}
             </main>
           </Providers>

@@ -97,6 +97,15 @@ def test_fixed_date_rules_respect_the_years_they_existed() -> None:
     }
 
 
+def test_numbered_commemorations_show_the_anniversary() -> None:
+    by_key = lambda year: {o.rule.key: o for o in fixed_date_occurrences(year)}  # noqa: E731
+    independence = by_key(2026)["independence-day"]
+    assert independence.title_en == "Independence Day (73rd anniversary)"
+    assert independence.title_km == "ពិធីបុណ្យឯករាជ្យជាតិ ខួបលើកទី៧៣"
+    assert by_key(2022)["kun-lbokator-heritage"].anniversary is None
+    assert by_key(2026)["constitution-day"].title_en == "Constitution Day"
+
+
 def test_shaving_day_is_the_eve_of_full_and_new_moon() -> None:
     # February 2027: 5 Feb = ១៤រោច before the new moon, 20 Feb = ១៤កើត before the full moon.
     assert engine.to_lunar(date(2027, 2, 5)).is_shaving_day

@@ -28,6 +28,12 @@ class Settings(BaseSettings):
     database_pool_timeout_seconds: int = 10
     database_statement_timeout_ms: int = 5000
 
+    # Optional response cache. Unset disables it; e.g. redis://localhost:6379/0 or rediss://… for TLS.
+    redis_url: str | None = None
+    redis_timeout_seconds: float = 0.5
+    # Calendar data doesn't change between deploys; 0 keeps entries until Redis evicts them.
+    cache_ttl_seconds: int = Field(default=30 * 24 * 3600, ge=0)
+
     # NoDecode: accept a plain comma-separated value instead of requiring JSON.
     cors_origins: Annotated[list[str], NoDecode] = Field(default_factory=lambda: ["http://localhost:3000"])
     timezone: str = "Asia/Phnom_Penh"

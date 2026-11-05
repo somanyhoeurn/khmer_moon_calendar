@@ -94,7 +94,7 @@ export function MonthYearPicker({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg text-left hover:text-primary-hover">
+      <DialogTrigger className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg text-left hover:text-primary-text">
         {children}
       </DialogTrigger>
       <DialogContent closeLabel={t("close")}>
